@@ -79,25 +79,39 @@ class Solution {
     // if(sum == 0) insert those three elements into the set then move j and k
     // both util the element is not eqaul to previous move j and k until j < k
     // them move i
-
     class Solution {
       public:
         vector<vector<int>> threeSum(vector<int> &nums) {
             int n = nums.size();
+            sort(nums.begin(), nums.end());
             set<vector<int>> st;
             for (int i = 0; i < n; i++) {
-                set<int> hashset;
-                for (int j = i + 1; j < n; j++) {
-                    int third = -(nums[i] + nums[j]);
-                    if (hashset.find(third) != hashset.end()) {
-                        vector<int> temp = {nums[i], nums[j], third};
-                        sort(temp.begin(), temp.end());
+                if (i < 0 && nums[i] == nums[i - 1]) {
+                    continue; // dont go down
+                }
+                int j = i + 1;
+                int k = n - 1;
+                while (j < k) {
+                    if (nums[i] + nums[j] + nums[k] < 0) {
+                        j++;
+                    } else if (nums[i] + nums[j] + nums[k] > 0) {
+                        k--;
+                    } else {
+                        vector<int> temp = {nums[i], nums[j], nums[k]};
+                        // ans.push_back(temp);
                         st.insert(temp);
+                        j++;
+                        k--;
+                        while (j < k && nums[j] == nums[j - 1]) {
+                            j++;
+                        }
+                        while (j < k && nums[k] == nums[k + 1]) {
+                            k--;
+                        }
                     }
-                    hashset.insert(nums[j]);
                 }
             }
-            vector<vector<int>> ans(st.begin(), st.end());
+            vector<vector<int>> ans{st.begin(), st.end()};
             return ans;
         }
     };
